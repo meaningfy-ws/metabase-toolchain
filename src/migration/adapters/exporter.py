@@ -3,9 +3,10 @@ from src.migration.adapters.api import API
 import json
 from pathlib import Path
 
+DEFAULT_EXPORT_FILE = "./metabase/data.json"
+
 
 class Exporter:
-    EXPORT_FILE = "./metabase/data.json"
     api: API
 
     def __init__(self, host: str, user: str, password: str):
@@ -33,9 +34,9 @@ class Exporter:
 
         return data
 
-    def save_data(self, file: str = None, data: MigrationData = None):
+    def save_data_to_file(self, file: str = None, data: MigrationData = None):
         if not file:
-            file = self.EXPORT_FILE
+            file = DEFAULT_EXPORT_FILE
         filepath = Path(file)
         filepath.parent.mkdir(parents=True, exist_ok=True)
 

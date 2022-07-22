@@ -6,7 +6,7 @@ from typing import List
 import dotenv
 
 from src.migration.adapters.api import API
-from src.migration.adapters.exporter import Exporter
+from src.migration.adapters.exporter import DEFAULT_EXPORT_FILE
 from src.migration.model.migration_data import MigrationData
 
 dotenv.load_dotenv(verbose=True, override=True)
@@ -19,7 +19,6 @@ MONGO_DB_PORT = int(ENV_MONGO_DB_PORT) if ENV_MONGO_DB_PORT else None
 
 
 class Importer:
-    IMPORT_FILE = Exporter.EXPORT_FILE
     api: API
 
     def __init__(self, host: str, user: str, password: str):
@@ -68,8 +67,8 @@ class Importer:
                 collection['color'] = "#000000"
             self.api.post_collection(collection)
 
-    def import_data(self, file: str = None):
-        data = self.load_data(file)
+    def import_data_from_file(self, file: str = None):
+        data = self.load_data_from_file(file)
 
         self._import_resources(data.metrics, self.api.post_metric)
         self._import_resources(data.segments, self.api.post_segment)
@@ -78,9 +77,10 @@ class Importer:
         self._import_collections(data.collections)
         self._import_dashboards(data.dashboards, data.dashboard_cards)
 
-    def load_data(self, file: str = None) -> MigrationData:
+    @classmethod
+    def load_data_from_file(cls, file: str = None) -> MigrationData:
         if not file:
-            file = self.IMPORT_FILE
+            file = DEFAULT_EXPORT_FILE
         filepath = Path(file)
 
         with open(filepath, "r") as f:
