@@ -32,7 +32,7 @@ setup(
     author="Meaningfy",
     author_email="kaleanych@gmail.com",
     maintainer="Meaningfy Team",
-    maintainer_email="ted-sws@meaningfy.ws",
+    maintainer_email="contact@meaningfy.ws",
     url="https://github.com/meaningfy-ws/metabase-toolchain",
     license="Apache License 2.0",
     platforms=["any"],
