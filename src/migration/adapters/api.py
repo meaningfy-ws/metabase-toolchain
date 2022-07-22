@@ -83,5 +83,3 @@ class API:
     def post_card(self, data: dict):
         return self.post(self.CARD_ENDPOINT, data)
 
-    def put(self, endpoint: str, data: dict):
-        return self.metabase.put(self.api_url(endpoint), json=data)
