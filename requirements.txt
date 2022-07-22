@@ -1,0 +1,4 @@
+metabase-python
+pydantic~=1.9.1
+urllib3==1.23
+python-dotenv
