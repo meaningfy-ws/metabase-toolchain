@@ -1,0 +1,6 @@
+# Development libraries
+coverage~=6.3.1
+pytest~=7.0.0
+tox~=3.24.5
+tox-pytest-summary~=0.1.2
+
