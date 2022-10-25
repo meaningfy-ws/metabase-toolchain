@@ -27,6 +27,7 @@ class Exporter:
         data.metrics = self.api.get_metrics()
         data.segments = self.api.get_segments()
         data.cards = self.api.get_cards()
+        data.users = self.api.get_users()
 
         for dashboard in data.dashboards:
             dashboard_id = dashboard["id"]

@@ -73,6 +73,7 @@ class Importer:
         self._import_resources(data.metrics, self.api.post_metric)
         self._import_resources(data.segments, self.api.post_segment)
         self._import_resources(data.cards, self.api.post_card)
+        self._import_resources(data.users, self.api.post_user)
         self._import_databases(data.databases)
         self._import_collections(data.collections)
         self._import_dashboards(data.dashboards, data.dashboard_cards)

@@ -18,6 +18,7 @@ class API:
     CARD_ENDPOINT = "/card"
     DASHBOARD_CARD_ENDPOINT = "/dashboard/{id}"
     DASHBOARD_CARDS_ENDPOINT = "/dashboard/{id}/cards"
+    USER_ENDPOINT = "/user"
 
     def __init__(self, host: str, user: str, password: str):
         self.metabase = Metabase(
@@ -29,8 +30,8 @@ class API:
     def api_url(self, endpoint: str):
         return self.BASE_URL + endpoint
 
-    def get(self, endpoint: str):
-        return self.metabase.get(self.api_url(endpoint)).json()
+    def get(self, endpoint: str, **kwargs):
+        return self.metabase.get(self.api_url(endpoint), **kwargs).json()
 
     def get_collections(self):
         return self.get(self.COLLECTION_ENDPOINT)
@@ -52,6 +53,9 @@ class API:
 
     def get_dashboard_cards(self, dashboard_id: str):
         return self.get(self.DASHBOARD_CARD_ENDPOINT.format(id=dashboard_id))
+
+    def get_users(self):
+        return self.get(self.USER_ENDPOINT, status="all")
 
     def post(self, endpoint: str, data: dict):
         try:
@@ -82,4 +86,7 @@ class API:
 
     def post_card(self, data: dict):
         return self.post(self.CARD_ENDPOINT, data)
+
+    def post_user(self, data: dict):
+        return self.post(self.USER_ENDPOINT, data)
 
