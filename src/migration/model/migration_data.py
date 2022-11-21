@@ -11,4 +11,5 @@ class MigrationData(BaseModel):
     metrics: Optional[List] = []
     segments: Optional[List] = []
     cards: Optional[List] = []
+    permissions_groups: Optional[List] = []
     users: Optional[List] = []

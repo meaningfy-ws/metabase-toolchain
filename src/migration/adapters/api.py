@@ -18,6 +18,7 @@ class API:
     CARD_ENDPOINT = "/card"
     DASHBOARD_CARD_ENDPOINT = "/dashboard/{id}"
     DASHBOARD_CARDS_ENDPOINT = "/dashboard/{id}/cards"
+    PERMISSIONS_GROUP_ENDPOINT = "/permissions/group"
     USER_ENDPOINT = "/user"
 
     def __init__(self, host: str, user: str, password: str):
@@ -54,8 +55,11 @@ class API:
     def get_dashboard_cards(self, dashboard_id: str):
         return self.get(self.DASHBOARD_CARD_ENDPOINT.format(id=dashboard_id))
 
+    def get_permissions_groups(self):
+        return self.get(self.PERMISSIONS_GROUP_ENDPOINT)
+
     def get_users(self):
-        return self.get(self.USER_ENDPOINT, status="all")
+        return self.get(self.USER_ENDPOINT, params={"status": "all"})
 
     def post(self, endpoint: str, data: dict):
         try:
