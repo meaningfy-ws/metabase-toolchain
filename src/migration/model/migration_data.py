@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import List, Optional, Dict
 
 from pydantic import BaseModel
 
@@ -12,4 +12,5 @@ class MigrationData(BaseModel):
     segments: Optional[List] = []
     cards: Optional[List] = []
     permissions_groups: Optional[List] = []
+    permissions_memberships: Optional[Dict] = {}
     users: Optional[List] = []

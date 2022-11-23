@@ -1,5 +1,5 @@
-from metabase import Metabase
 import requests
+from metabase import Metabase
 
 """
 Metabase 0.42.4
@@ -19,13 +19,14 @@ class API:
     DASHBOARD_CARD_ENDPOINT = "/dashboard/{id}"
     DASHBOARD_CARDS_ENDPOINT = "/dashboard/{id}/cards"
     PERMISSIONS_GROUP_ENDPOINT = "/permissions/group"
+    PERMISSIONS_MEMBERSHIP_ENDPOINT = "/permissions/membership"
     USER_ENDPOINT = "/user"
 
     def __init__(self, host: str, user: str, password: str):
         self.metabase = Metabase(
             host=host,
             user=user,
-            password=password,
+            password=password
         )
 
     def api_url(self, endpoint: str):
@@ -34,11 +35,14 @@ class API:
     def get(self, endpoint: str, **kwargs):
         return self.metabase.get(self.api_url(endpoint), **kwargs).json()
 
+    def get_collection(self, collection_id):
+        return self.get(f"{self.COLLECTION_ENDPOINT}/{collection_id}")
+
     def get_collections(self):
         return self.get(self.COLLECTION_ENDPOINT)
 
     def get_dashboards(self):
-        return self.get(self.DASHBOARD_ENDPOINT)
+        return self.get(self.DASHBOARD_ENDPOINT, params={"f": "mine"})
 
     def get_databases(self):
         return self.get(self.DATABASE_ENDPOINT)
@@ -58,16 +62,26 @@ class API:
     def get_permissions_groups(self):
         return self.get(self.PERMISSIONS_GROUP_ENDPOINT)
 
-    def get_users(self):
-        return self.get(self.USER_ENDPOINT, params={"status": "all"})
+    def get_permissions_memberships(self):
+        return self.get(self.PERMISSIONS_MEMBERSHIP_ENDPOINT)
 
-    def post(self, endpoint: str, data: dict):
+    def get_user(self, user_email):
+        return self.get(f"{self.USER_ENDPOINT}", params={"query": f"email={user_email}"})
+
+    def get_users(self):
+        api_users = self.get(self.USER_ENDPOINT, params={"status": "all"})
+        return api_users["data"] if api_users else []
+
+    def post(self, endpoint: str, data: dict, with_exception: bool = False):
         try:
             r = self.metabase.post(self.api_url(endpoint), json=data)
             r.raise_for_status()
         except requests.exceptions.HTTPError as err:
-            print("HTTP Error :: ", r.status_code, r.content.decode("utf-8"))
-            print(data)
+            if with_exception:
+                raise err
+            else:
+                print("HTTP Error :: ", r.status_code, r.content.decode("utf-8"))
+                print(data)
         return r
 
     def post_collection(self, data: dict):
@@ -91,6 +105,11 @@ class API:
     def post_card(self, data: dict):
         return self.post(self.CARD_ENDPOINT, data)
 
-    def post_user(self, data: dict):
-        return self.post(self.USER_ENDPOINT, data)
+    def post_permissions_group(self, data: dict):
+        return self.post(self.PERMISSIONS_GROUP_ENDPOINT, data)
 
+    def post_permissions_membership(self, data: dict):
+        return self.post(self.PERMISSIONS_MEMBERSHIP_ENDPOINT, data)
+
+    def post_user(self, data: dict, with_exception: bool = False):
+        return self.post(self.USER_ENDPOINT, data, with_exception=with_exception)

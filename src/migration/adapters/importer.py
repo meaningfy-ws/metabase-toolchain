@@ -1,7 +1,8 @@
 import json
 import os
 from pathlib import Path
-from typing import List
+from typing import List, Dict
+import requests
 
 import dotenv
 
@@ -25,7 +26,7 @@ class Importer:
         self.api = API(
             host=host,
             user=user,
-            password=password,
+            password=password
         )
 
     @classmethod
@@ -67,16 +68,31 @@ class Importer:
                 collection['color'] = "#000000"
             self.api.post_collection(collection)
 
+    def _import_permissions_memberships(self, permissions_memberships: Dict):
+        for user_id in permissions_memberships:
+            user_permissions_memberships = permissions_memberships.get(user_id)
+            for user_permissions_membership in user_permissions_memberships:
+                self.api.post_permissions_membership(user_permissions_membership)
+
+    def _import_users(self, users: List):
+        for user in users:
+            try:
+                self.api.post_user(user, with_exception=True)
+            except requests.exceptions.HTTPError as err:
+                print(err)
+
     def import_data_from_file(self, file: str = None):
         data = self.load_data_from_file(file)
 
         self._import_resources(data.metrics, self.api.post_metric)
         self._import_resources(data.segments, self.api.post_segment)
         self._import_resources(data.cards, self.api.post_card)
-        self._import_resources(data.users, self.api.post_user)
+        self._import_resources(data.permissions_groups, self.api.post_permissions_group)
+        self._import_permissions_memberships(data.permissions_memberships)
         self._import_databases(data.databases)
         self._import_collections(data.collections)
         self._import_dashboards(data.dashboards, data.dashboard_cards)
+        self._import_users(data.users)
 
     @classmethod
     def load_data_from_file(cls, file: str = None) -> MigrationData:

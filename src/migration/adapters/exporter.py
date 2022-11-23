@@ -16,10 +16,18 @@ class Exporter:
             password=password,
         )
 
+    def get_collections(self):
+        data_collections = []
+        collections = self.api.get_collections()
+        for collection in collections:
+            data_collections.append(self.api.get_collection(collection["id"]))
+
+        return data_collections
+
     def export_data(self) -> MigrationData:
         data = MigrationData()
 
-        data.collections = self.api.get_collections()
+        data.collections = self.get_collections()
         data.dashboards = self.api.get_dashboards()
         databases = self.api.get_databases()
         if databases and databases['data']:
@@ -28,6 +36,7 @@ class Exporter:
         data.segments = self.api.get_segments()
         data.cards = self.api.get_cards()
         data.permissions_groups = self.api.get_permissions_groups()
+        data.permissions_memberships = self.api.get_permissions_memberships()
         data.users = self.api.get_users()
 
         for dashboard in data.dashboards:
