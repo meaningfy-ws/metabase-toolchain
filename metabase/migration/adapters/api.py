@@ -1,5 +1,5 @@
 import requests
-from metabase import Metabase
+from metabase.migration.adapters.metabase import Metabase
 
 """
 Metabase 0.42.4
@@ -12,6 +12,7 @@ class API:
     COLLECTION_ENDPOINT = "/collection"
     DASHBOARD_ENDPOINT = "/dashboard"
     DATABASE_ENDPOINT = "/database"
+    TABLE_ENDPOINT = "/table"
     METRIC_ENDPOINT = "/metric"
     SEGMENT_ENDPOINT = "/segment"
     SETTING_ENDPOINT = "/setting"
@@ -19,7 +20,6 @@ class API:
     DASHBOARD_CARD_ENDPOINT = "/dashboard/{id}"
     DASHBOARD_CARDS_ENDPOINT = "/dashboard/{id}/cards"
     PERMISSIONS_GROUP_ENDPOINT = "/permissions/group"
-    PERMISSIONS_MEMBERSHIP_ENDPOINT = "/permissions/membership"
     USER_ENDPOINT = "/user"
 
     def __init__(self, host: str, user: str, password: str):
@@ -42,10 +42,22 @@ class API:
         return self.get(self.COLLECTION_ENDPOINT)
 
     def get_dashboards(self):
-        return self.get(self.DASHBOARD_ENDPOINT, params={"f": "mine"})
+        return self.get(self.DASHBOARD_ENDPOINT)
 
     def get_databases(self):
-        return self.get(self.DATABASE_ENDPOINT)
+        data = self.get(self.DATABASE_ENDPOINT, params={"saved": True})
+        databases = []
+        if data:
+            databases = data['data']
+            for db in databases:
+                db_tables = self.get(f"{self.DATABASE_ENDPOINT}/{db['id']}", params={"include": "tables.fields"})
+                if db_tables and ("tables" in db_tables):
+                    db["tables"] = db_tables["tables"]
+
+        return databases
+
+    def get_tables(self):
+        return self.get(self.TABLE_ENDPOINT)
 
     def get_metrics(self):
         return self.get(self.METRIC_ENDPOINT)
@@ -62,27 +74,18 @@ class API:
     def get_permissions_groups(self):
         return self.get(self.PERMISSIONS_GROUP_ENDPOINT)
 
-    def get_permissions_memberships(self):
-        return self.get(self.PERMISSIONS_MEMBERSHIP_ENDPOINT)
-
-    def get_user(self, user_email):
-        return self.get(f"{self.USER_ENDPOINT}", params={"query": f"email={user_email}"})
-
     def get_users(self):
         api_users = self.get(self.USER_ENDPOINT, params={"status": "all"})
         return api_users["data"] if api_users else []
 
-    def post(self, endpoint: str, data: dict, with_exception: bool = False):
+    def post(self, endpoint: str, data: dict):
         try:
             r = self.metabase.post(self.api_url(endpoint), json=data)
             r.raise_for_status()
-        except requests.exceptions.HTTPError as err:
-            if with_exception:
-                raise err
-            else:
-                print("HTTP Error :: ", r.status_code, r.content.decode("utf-8"))
-                print(data)
-        return r
+        except requests.exceptions.HTTPError:
+            print("HTTP Error :: ", r.status_code, r.content.decode("utf-8"))
+            print(data)
+        return r.json()
 
     def post_collection(self, data: dict):
         return self.post(self.COLLECTION_ENDPOINT, data)
@@ -108,8 +111,26 @@ class API:
     def post_permissions_group(self, data: dict):
         return self.post(self.PERMISSIONS_GROUP_ENDPOINT, data)
 
-    def post_permissions_membership(self, data: dict):
-        return self.post(self.PERMISSIONS_MEMBERSHIP_ENDPOINT, data)
+    def post_user(self, data: dict):
+        return self.post(self.USER_ENDPOINT, data)
 
-    def post_user(self, data: dict, with_exception: bool = False):
-        return self.post(self.USER_ENDPOINT, data, with_exception=with_exception)
+    def put(self, endpoint: str, data: dict):
+        return self.metabase.put(self.api_url(endpoint), json=data).json()
+
+    def put_database(self, database_id, data: dict):
+        return self.put(f"{self.DATABASE_ENDPOINT}/{database_id}", data)
+
+    def put_permissions_group(self, permissions_group_id, data: dict):
+        return self.put(f"{self.PERMISSIONS_GROUP_ENDPOINT}/{permissions_group_id}", data)
+
+    def put_user(self, user_id, data: dict):
+        return self.put(f"{self.USER_ENDPOINT}/{user_id}", data)
+
+    def put_dashboard(self, dashboard_id, data: dict):
+        return self.put(f"{self.DASHBOARD_ENDPOINT}/{dashboard_id}", data)
+
+    def put_collection(self, collection_id, data: dict):
+        return self.put(f"{self.COLLECTION_ENDPOINT}/{collection_id}", data)
+
+    def put_card(self, card_id, data: dict):
+        return self.put(f"{self.CARD_ENDPOINT}/{card_id}", data)
