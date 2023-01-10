@@ -5,6 +5,7 @@ from pydantic import BaseModel
 
 class MigrationData(BaseModel):
     collections: Optional[List[Dict]] = []
+    collections_graph: Optional[Dict] = []
     dashboards: Optional[List[Dict]] = []
     dashboard_cards: Optional[List[Dict]] = []
     databases: Optional[List[Dict]] = []
@@ -14,3 +15,4 @@ class MigrationData(BaseModel):
     cards: Optional[List[Dict]] = []
     permissions_groups: Optional[List[Dict]] = []
     users: Optional[List[Dict]] = []
+    settings: Optional[List[Dict]] = []

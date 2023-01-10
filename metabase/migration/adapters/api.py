@@ -10,6 +10,7 @@ class API:
     metabase: Metabase
     BASE_URL = "/api"
     COLLECTION_ENDPOINT = "/collection"
+    COLLECTION_GRAPH_ENDPOINT = "/collection/graph"
     DASHBOARD_ENDPOINT = "/dashboard"
     DATABASE_ENDPOINT = "/database"
     TABLE_ENDPOINT = "/table"
@@ -38,11 +39,20 @@ class API:
     def get_collection(self, collection_id):
         return self.get(f"{self.COLLECTION_ENDPOINT}/{collection_id}")
 
+    def get_collections_graph(self):
+        return self.get(f"{self.COLLECTION_GRAPH_ENDPOINT}")
+
     def get_collections(self):
         return self.get(self.COLLECTION_ENDPOINT)
 
     def get_dashboards(self):
         return self.get(self.DASHBOARD_ENDPOINT)
+
+    def get_database(self, db_id, full_sync=True):
+        params = None
+        if full_sync:
+            params = {"include": "tables.fields"}
+        return self.get(f"{self.DATABASE_ENDPOINT}/{db_id}", params=params)
 
     def get_databases(self):
         data = self.get(self.DATABASE_ENDPOINT, params={"saved": True})
@@ -50,7 +60,7 @@ class API:
         if data:
             databases = data['data']
             for db in databases:
-                db_tables = self.get(f"{self.DATABASE_ENDPOINT}/{db['id']}", params={"include": "tables.fields"})
+                db_tables = self.get_database(db['id'])
                 if db_tables and ("tables" in db_tables):
                     db["tables"] = db_tables["tables"]
 
@@ -78,14 +88,13 @@ class API:
         api_users = self.get(self.USER_ENDPOINT, params={"status": "all"})
         return api_users["data"] if api_users else []
 
+    def get_settings(self):
+        api_settings = self.get(self.SETTING_ENDPOINT)
+        return api_settings
+
     def post(self, endpoint: str, data: dict):
-        try:
-            r = self.metabase.post(self.api_url(endpoint), json=data)
-            r.raise_for_status()
-        except requests.exceptions.HTTPError:
-            print("HTTP Error :: ", r.status_code, r.content.decode("utf-8"))
-            print(data)
-        return r.json()
+        response = self.metabase.post(self.api_url(endpoint), json=data)
+        return response.json()
 
     def post_collection(self, data: dict):
         return self.post(self.COLLECTION_ENDPOINT, data)
@@ -115,7 +124,12 @@ class API:
         return self.post(self.USER_ENDPOINT, data)
 
     def put(self, endpoint: str, data: dict):
-        return self.metabase.put(self.api_url(endpoint), json=data).json()
+        response = self.metabase.put(self.api_url(endpoint), json=data)
+        try:
+            content = response.json()
+        except ValueError:
+            content = response.content
+        return content
 
     def put_database(self, database_id, data: dict):
         return self.put(f"{self.DATABASE_ENDPOINT}/{database_id}", data)
@@ -129,8 +143,17 @@ class API:
     def put_dashboard(self, dashboard_id, data: dict):
         return self.put(f"{self.DASHBOARD_ENDPOINT}/{dashboard_id}", data)
 
+    def put_dashboard_card(self, dashboard_id, data: dict):
+        return self.put(f"{self.DASHBOARD_CARD_ENDPOINT}/{dashboard_id}", data)
+
     def put_collection(self, collection_id, data: dict):
         return self.put(f"{self.COLLECTION_ENDPOINT}/{collection_id}", data)
 
+    def put_collection_graph(self, data: dict):
+        return self.put(f"{self.COLLECTION_GRAPH_ENDPOINT}", data)
+
     def put_card(self, card_id, data: dict):
         return self.put(f"{self.CARD_ENDPOINT}/{card_id}", data)
+
+    def put_settings(self, data: dict):
+        return self.put(f"{self.SETTING_ENDPOINT}", data)

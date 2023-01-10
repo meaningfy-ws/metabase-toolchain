@@ -13,7 +13,8 @@ def generate_map(key_field: str, value_field: str, data: list):
 def generate_keys_map(source_field: str, target_field: str, data2: dict, items: list):
     keys_map = {}
     for item in items:
-        keys_map[item[source_field]] = data2[item[target_field]]
+        if item[target_field] in data2:
+            keys_map[item[source_field]] = data2[item[target_field]]
     return keys_map
 
 

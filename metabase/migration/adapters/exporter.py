@@ -33,6 +33,8 @@ class Exporter:
 
         self.logger.info('... collections')
         data.collections = self.get_collections()
+        self.logger.info('... collections_graph')
+        data.collections_graph = self.api.get_collections_graph()
         self.logger.info('... dashboards')
         data.dashboards = self.api.get_dashboards()
         self.logger.info('... databases')
@@ -51,6 +53,8 @@ class Exporter:
         data.permissions_groups = self.api.get_permissions_groups()
         self.logger.info('... users')
         data.users = self.api.get_users()
+        self.logger.info('... settings')
+        data.settings = self.api.get_settings()
 
         for dashboard in data.dashboards:
             dashboard_id = dashboard["id"]
