@@ -18,7 +18,7 @@ def find_version(filename):
             return version_match.group(1)
 
 
-version = find_version("src/__init__.py")
+version = find_version("metabase/__init__.py")
 
 with open("README.md", encoding="utf-8") as readme:
     long_description = readme.read()
@@ -55,8 +55,8 @@ setup(
     packages=packages,
     entry_points={
         "console_scripts": [
-            "export_metabase = src.migration.entrypoints.cli.cmd_export_metabase:main",
-            "import_metabase = src.migration.entrypoints.cli.cmd_import_metabase:main"
+            "export_metabase = metabase.migration.entrypoints.cli.cmd_export_metabase:main",
+            "import_metabase = metabase.migration.entrypoints.cli.cmd_import_metabase:main"
         ],
     },
     include_package_data=True,

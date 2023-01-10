@@ -1,23 +1,19 @@
-import json
-import os
-from pathlib import Path
-
 import click
 
-from src.migration.adapters.cmd_runner import CmdRunner as BaseCmdRunner
-from src.migration.services.export_metabase import export_metabase_data_to_file
+from metabase.core.adapters.cmd_runner import CmdRunner as BaseCmdRunner
+from metabase.migration.services.import_metabase import import_metabase_data_from_file
 
-CMD_NAME = "EXPORT_METABASE"
+CMD_NAME = "IMPORT_METABASE"
 
 """
 USAGE:
-# export_metabase --help
+# import_metabase --help
 """
 
 
 class CmdRunner(BaseCmdRunner):
     """
-    Metabase export CLI tool
+    Metabase import CLI tool
     """
 
     def __init__(self, host, user, password, file):
@@ -30,7 +26,7 @@ class CmdRunner(BaseCmdRunner):
     def run_cmd(self):
         error = None
         try:
-            export_metabase_data_to_file(self.host, self.user, self.password, self.file)
+            import_metabase_data_from_file(self.host, self.user, self.password, self.file, self.get_logger())
         except Exception as e:
             error = e
 
