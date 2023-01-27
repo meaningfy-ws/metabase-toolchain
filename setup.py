@@ -56,9 +56,11 @@ setup(
     entry_points={
         "console_scripts": [
             "export_metabase = metabase.migration.entrypoints.cli.cmd_export_metabase:main",
-            "import_metabase = metabase.migration.entrypoints.cli.cmd_import_metabase:main"
+            "import_metabase = metabase.migration.entrypoints.cli.cmd_import_metabase:main",
+            "manage_snapshot_db = metabase.migration.entrypoints.cli.cmd_manage_db_snapshot:main",
         ],
     },
     include_package_data=True,
+    package_data={'': ['resources/*.json']},
     **kwargs,
 )
