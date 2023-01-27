@@ -15,10 +15,10 @@ from metabase.migration.services import find_element, add_fields_to_tables, gene
 
 dotenv.load_dotenv(verbose=True, override=True)
 
-MONGO_DB_USER = os.environ.get('MONGO_DB_USER')
-MONGO_DB_PASS = os.environ.get('MONGO_DB_PASS')
-MONGO_DB_HOST = os.environ.get('MONGO_DB_HOST')
-ENV_MONGO_DB_PORT = os.environ.get('MONGO_DB_PORT')
+MONGO_DB_USER = os.environ.get('MONGO_DB_USER', default=None)
+MONGO_DB_PASS = os.environ.get('MONGO_DB_PASS', default=None)
+MONGO_DB_HOST = os.environ.get('MONGO_DB_HOST', default=None)
+ENV_MONGO_DB_PORT = os.environ.get('MONGO_DB_PORT', default=None)
 MONGO_DB_PORT = int(ENV_MONGO_DB_PORT) if ENV_MONGO_DB_PORT else None
 
 

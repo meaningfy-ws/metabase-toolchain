@@ -108,3 +108,4 @@ metabase/*.json
 build
 *.egg-info
 __pycache__
+venv_activation.sh
