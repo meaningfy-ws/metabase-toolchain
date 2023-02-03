@@ -49,11 +49,14 @@ class CmdRunner(BaseCmdRunner):
             inject_mongodb_snapshot(database_name=self.db_name,
                                     database_snapshot_path=DB_SNAPSHOT_FILE_PATH,
                                     mongodb_client=mongodb_client)
-            print("Inject MongoDB snapshot:")
-            wait_n_seconds(60*5)
+            sync_metabase = True
+            while sync_metabase:
+                answer = input("You sync MetaBase already?[y/n]")
+                if answer == "y":
+                    sync_metabase = False
+                else:
+                    print(f"Go to in MetaBase and sync {self.db_name}!")
             import_metabase_data_from_file(self.host, self.user, self.password, self.file, self.get_logger())
-            print("Wait to delete MongoDB snapshot:")
-            wait_n_seconds(60*2)
             remove_mongodb_snapshot(database_name=self.db_name, mongodb_client=mongodb_client)
         except Exception as e:
             error = e
