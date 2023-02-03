@@ -6,6 +6,19 @@ from metabase.migration.resources import DB_SNAPSHOT_FILE_PATH
 from metabase.migration.services.database_management import remove_mongodb_snapshot, \
     inject_mongodb_snapshot
 from metabase.migration.services.import_metabase import import_metabase_data_from_file
+import time
+from loadbar import LoadBar
+
+
+def wait_n_seconds(number_of_seconds: int):
+    bar = LoadBar(max=number_of_seconds)
+    bar.start()
+    for i in range(number_of_seconds):
+        time.sleep(1)
+        bar.update(step=i)
+    bar.end()
+
+
 
 CMD_NAME = "IMPORT_METABASE"
 
@@ -36,7 +49,11 @@ class CmdRunner(BaseCmdRunner):
             inject_mongodb_snapshot(database_name=self.db_name,
                                     database_snapshot_path=DB_SNAPSHOT_FILE_PATH,
                                     mongodb_client=mongodb_client)
+            print("Inject MongoDB snapshot:")
+            wait_n_seconds(60*5)
             import_metabase_data_from_file(self.host, self.user, self.password, self.file, self.get_logger())
+            print("Wait to delete MongoDB snapshot:")
+            wait_n_seconds(60*2)
             remove_mongodb_snapshot(database_name=self.db_name, mongodb_client=mongodb_client)
         except Exception as e:
             error = e
