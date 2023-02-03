@@ -3,7 +3,8 @@ from pymongo import MongoClient
 
 from metabase.core.adapters.cmd_runner import CmdRunner as BaseCmdRunner
 from metabase.migration.resources import DB_SNAPSHOT_FILE_PATH
-from metabase.migration.services.database_management import create_mongodb_snapshot, remove_mongodb_snapshot
+from metabase.migration.services.database_management import remove_mongodb_snapshot, \
+    inject_mongodb_snapshot
 from metabase.migration.services.import_metabase import import_metabase_data_from_file
 
 CMD_NAME = "IMPORT_METABASE"
@@ -32,8 +33,8 @@ class CmdRunner(BaseCmdRunner):
         error = None
         try:
             mongodb_client = MongoClient(self.db_auth_url)
-            create_mongodb_snapshot(database_name=self.db_name,
-                                    result_snapshot_path=DB_SNAPSHOT_FILE_PATH,
+            inject_mongodb_snapshot(database_name=self.db_name,
+                                    database_snapshot_path=DB_SNAPSHOT_FILE_PATH,
                                     mongodb_client=mongodb_client)
             import_metabase_data_from_file(self.host, self.user, self.password, self.file, self.get_logger())
             remove_mongodb_snapshot(database_name=self.db_name, mongodb_client=mongodb_client)
