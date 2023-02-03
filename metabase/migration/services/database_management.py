@@ -15,6 +15,7 @@ MONGODB_ID_KEY = "_id"
 MONGODB_ID_TYPE_KEY = "proto_id_type"
 SNAPSHOT_ID_KEY = "injected_snapshot_id"
 SNAPSHOT_ID_VALUE = "proto_doc"
+DELETE_ME_COLLECTION = "delete_me"
 
 
 def merge_dicts(source: dict, destination: dict):
@@ -82,6 +83,8 @@ def inject_mongodb_snapshot(database_snapshot_path: pathlib.Path, mongodb_client
         else:
             proto_document[MONGODB_ID_KEY] = str(ObjectId())
         db_collection.insert_one(document=proto_document)
+    if DELETE_ME_COLLECTION in db.list_collection_names():
+        db.drop_collection(DELETE_ME_COLLECTION)
 
 
 def remove_mongodb_snapshot(database_name: str, mongodb_client: MongoClient):
