@@ -1,0 +1,544 @@
+{
+  "database_name": "aggregates_db",
+  "collections": [
+    {
+      "collection_name": "notice_events",
+      "proto_document": {
+        "_id": "63e6442fd93f36ea949ab01a",
+        "message": null,
+        "created_at": null,
+        "year": null,
+        "month": null,
+        "day": null,
+        "severity_level": null,
+        "caller_name": null,
+        "started_at": null,
+        "ended_at": null,
+        "duration": null,
+        "metadata": null,
+        "kwargs": null,
+        "notice_id": null,
+        "domain_action": null,
+        "notice_form_number": null,
+        "notice_eforms_subtype": null,
+        "notice_status": null,
+        "created_at_str_y": null,
+        "created_at_str_ym": null,
+        "created_at_str_ymd": null,
+        "created_at_str_ymd_t": null,
+        "started_at_str_y": null,
+        "started_at_str_ym": null,
+        "started_at_str_ymd": null,
+        "started_at_str_ymd_t": null,
+        "ended_at_str_y": null,
+        "ended_at_str_ym": null,
+        "ended_at_str_ymd": null,
+        "ended_at_str_ymd_t": null,
+        "proto_id_type": "<class 'bson.objectid.ObjectId'>",
+        "injected_snapshot_id": "proto_doc"
+      }
+    },
+    {
+      "collection_name": "notice_metadata",
+      "proto_document": {
+        "_id": "003548-2021_xml",
+        "AA": [],
+        "AC": null,
+        "CY": [],
+        "DD": null,
+        "DI": null,
+        "DS": null,
+        "DT": [],
+        "MA": [],
+        "NC": [],
+        "ND": null,
+        "NL": null,
+        "OC": [],
+        "OJ": null,
+        "OL": null,
+        "OY": [],
+        "PC": [],
+        "PD": null,
+        "PR": null,
+        "RC": [],
+        "RN": [],
+        "RP": null,
+        "TD": null,
+        "TVH": null,
+        "TVL": null,
+        "TY": null,
+        "award_criterion_type": null,
+        "corporate_body": null,
+        "funding": null,
+        "metadata_type": null,
+        "notice_identifier": null,
+        "notice_type": null,
+        "notice_version": null,
+        "ted_id": null,
+        "city_of_buyer": [],
+        "country_of_buyer": null,
+        "deadline_for_submission": null,
+        "document_sent_date": null,
+        "eforms_subtype": null,
+        "eu_institution": null,
+        "extracted_legal_basis_directive": null,
+        "form_number": null,
+        "form_type": null,
+        "legal_basis_directive": null,
+        "long_title": [],
+        "name_of_buyer": [],
+        "notice_publication_number": null,
+        "ojs_issue_number": null,
+        "ojs_type": null,
+        "original_language": null,
+        "place_of_performance": [],
+        "publication_date": null,
+        "title": [],
+        "xsd_version": null,
+        "unique_xpaths": [],
+        "proto_id_type": "<class 'str'>",
+        "injected_snapshot_id": "proto_doc"
+      }
+    },
+    {
+      "collection_name": "notice_manifestations",
+      "proto_document": {
+        "_id": "003563-2021_mets",
+        "manifestation_type": null,
+        "object_data": null,
+        "ted_id": null,
+        "xpath_coverage_validation": {
+          "object_data": null,
+          "created": null,
+          "mapping_suite_identifier": null,
+          "validation_result": {
+            "notice_id": [],
+            "xpath_assertions": [],
+            "xpath_covered": [],
+            "xpath_not_covered": [],
+            "xpath_extra": [],
+            "coverage": null,
+            "conceptual_coverage": null
+          }
+        },
+        "deduplication_report": {
+          "object_data": null,
+          "number_of_duplicates": null,
+          "number_of_cets": null,
+          "uries": []
+        },
+        "mapping_suite_id": null,
+        "shacl_validations": [],
+        "sparql_validations": [],
+        "proto_id_type": "<class 'str'>",
+        "injected_snapshot_id": "proto_doc"
+      }
+    },
+    {
+      "collection_name": "technical_events",
+      "proto_document": {
+        "_id": "63e643def618f165b2410eed",
+        "message": null,
+        "created_at": null,
+        "year": null,
+        "month": null,
+        "day": null,
+        "severity_level": null,
+        "caller_name": null,
+        "started_at": null,
+        "ended_at": null,
+        "duration": null,
+        "metadata": {
+          "process_type": null,
+          "process_name": null,
+          "process_id": null,
+          "process_context": null
+        },
+        "kwargs": null,
+        "created_at_str_y": null,
+        "created_at_str_ym": null,
+        "created_at_str_ymd": null,
+        "created_at_str_ymd_t": null,
+        "started_at_str_y": null,
+        "started_at_str_ym": null,
+        "started_at_str_ymd": null,
+        "started_at_str_ymd_t": null,
+        "ended_at_str_y": null,
+        "ended_at_str_ym": null,
+        "ended_at_str_ymd": null,
+        "ended_at_str_ymd_t": null,
+        "proto_id_type": "<class 'bson.objectid.ObjectId'>",
+        "injected_snapshot_id": "proto_doc"
+      }
+    },
+    {
+      "collection_name": "mapping_suite_collection",
+      "proto_document": {
+        "_id": "package_F21_v6.6.0",
+        "created_at": null,
+        "identifier": null,
+        "title": null,
+        "version": null,
+        "ontology_version": null,
+        "git_latest_commit_hash": null,
+        "mapping_suite_hash_digest": null,
+        "metadata_constraints": {
+          "constraints": {
+            "eforms_subtype": [],
+            "start_date": [],
+            "end_date": [],
+            "min_xsd_version": [],
+            "max_xsd_version": []
+          }
+        },
+        "transformation_rule_set": {
+          "resources": [],
+          "rml_mapping_rules": []
+        },
+        "shacl_test_suites": [],
+        "sparql_test_suites": [],
+        "transformation_test_data": {
+          "test_data": []
+        },
+        "conceptual_mapping": {
+          "xpaths": [],
+          "metadata": {
+            "identifier": null,
+            "title": null,
+            "description": null,
+            "mapping_version": null,
+            "epo_version": null,
+            "base_xpath": null,
+            "metadata_constraints": {
+              "eforms_subtype": [],
+              "start_date": null,
+              "end_date": null,
+              "min_xsd_version": null,
+              "max_xsd_version": null
+            }
+          },
+          "rules": [],
+          "mapping_remarks": [],
+          "resources": [],
+          "rml_modules": [],
+          "cl1_roles": [],
+          "cl2_organisations": []
+        },
+        "created_at_str_y": null,
+        "created_at_str_ym": null,
+        "created_at_str_ymd": null,
+        "proto_id_type": "<class 'str'>",
+        "injected_snapshot_id": "proto_doc"
+      }
+    },
+    {
+      "collection_name": "notices_collection_materialised_view",
+      "proto_document": {
+        "_id": "003567-2021",
+        "created_at": null,
+        "created_at_str_y": null,
+        "created_at_str_ym": null,
+        "created_at_str_ymd": null,
+        "status": null,
+        "validation_summary": {
+          "object_data": null,
+          "created": null,
+          "notice_ids": [],
+          "xml_manifestation": {
+            "xpath_coverage_summary": {
+              "mapping_suite_identifier": null,
+              "validation_result": {
+                "xpath_covered": null,
+                "xpath_not_covered": null
+              }
+            }
+          },
+          "rdf_manifestation": {
+            "sparql_summary": {
+              "validation_results": [],
+              "aggregate": {
+                "valid": null,
+                "unverifiable": null,
+                "warning": null,
+                "invalid": null,
+                "error": null
+              }
+            },
+            "shacl_summary": {
+              "validation_results": [],
+              "result_severity": {
+                "aggregate": {
+                  "info": null,
+                  "warning": null,
+                  "violation": null
+                }
+              }
+            }
+          },
+          "distilled_rdf_manifestation": {
+            "sparql_summary": {
+              "validation_results": [],
+              "aggregate": {
+                "valid": null,
+                "unverifiable": null,
+                "warning": null,
+                "invalid": null,
+                "error": null
+              }
+            },
+            "shacl_summary": {
+              "validation_results": [],
+              "result_severity": {
+                "aggregate": {
+                  "info": null,
+                  "warning": null,
+                  "violation": null
+                }
+              }
+            }
+          }
+        },
+        "form_number": null,
+        "form_type": null,
+        "eu_institution": null,
+        "extracted_legal_basis_directive": null,
+        "ojs_type": null,
+        "legal_basis_directive": null,
+        "country_of_buyer": null,
+        "eforms_subtype": null,
+        "notice_type": null,
+        "xsd_version": null,
+        "publication_date": null,
+        "publication_date_str_ym": null,
+        "publication_date_str_ymd": null,
+        "proto_id_type": "<class 'str'>",
+        "injected_snapshot_id": "proto_doc"
+      }
+    },
+    {
+      "collection_name": "mapping_suite_events",
+      "proto_document": {
+        "_id": "63e64344e8071c7a9d38d2c6",
+        "message": null,
+        "created_at": null,
+        "year": null,
+        "month": null,
+        "day": null,
+        "severity_level": null,
+        "caller_name": null,
+        "started_at": null,
+        "ended_at": null,
+        "duration": null,
+        "metadata": {
+          "process_type": null,
+          "process_name": null,
+          "process_id": null,
+          "process_context": {
+            "task_id": null,
+            "params": {}
+          }
+        },
+        "kwargs": null,
+        "mapping_suite_id": null,
+        "created_at_str_y": null,
+        "created_at_str_ym": null,
+        "created_at_str_ymd": null,
+        "created_at_str_ymd_t": null,
+        "started_at_str_y": null,
+        "started_at_str_ym": null,
+        "started_at_str_ymd": null,
+        "started_at_str_ymd_t": null,
+        "ended_at_str_y": null,
+        "ended_at_str_ym": null,
+        "ended_at_str_ymd": null,
+        "ended_at_str_ymd_t": null,
+        "proto_id_type": "<class 'bson.objectid.ObjectId'>",
+        "injected_snapshot_id": "proto_doc"
+      }
+    },
+    {
+      "collection_name": "log_events",
+      "proto_document": {
+        "_id": "63e6447017a94fa4a480cd89",
+        "message": null,
+        "created_at": null,
+        "year": null,
+        "month": null,
+        "day": null,
+        "severity_level": null,
+        "caller_name": null,
+        "started_at": null,
+        "ended_at": null,
+        "duration": null,
+        "metadata": {
+          "process_type": null,
+          "process_name": null,
+          "process_id": null,
+          "process_context": {
+            "task_id": null,
+            "params": {
+              "notice_ids": [],
+              "start_with_step_name": null,
+              "execute_only_one_step": null
+            }
+          }
+        },
+        "kwargs": {
+          "pipeline_name": null,
+          "number_of_notices": null
+        },
+        "created_at_str_y": null,
+        "created_at_str_ym": null,
+        "created_at_str_ymd": null,
+        "created_at_str_ymd_t": null,
+        "started_at_str_y": null,
+        "started_at_str_ym": null,
+        "started_at_str_ymd": null,
+        "started_at_str_ymd_t": null,
+        "ended_at_str_y": null,
+        "ended_at_str_ym": null,
+        "ended_at_str_ymd": null,
+        "ended_at_str_ymd_t": null,
+        "proto_id_type": "<class 'bson.objectid.ObjectId'>",
+        "injected_snapshot_id": "proto_doc"
+      }
+    },
+    {
+      "collection_name": "batch_events",
+      "proto_document": {
+        "_id": "{'process_id': None, 'nr_of_notices': None, 'caller_name': None}",
+        "exec_time": null,
+        "nr_of_pipelines": null,
+        "batch_nr_of_notices": null,
+        "proto_id_type": "<class 'dict'>",
+        "injected_snapshot_id": "proto_doc"
+      }
+    },
+    {
+      "collection_name": "daily_supra_notice_collection",
+      "proto_document": {
+        "_id": "637c817ea2a5364868f04957",
+        "notice_fetched_date": null,
+        "created_at": null,
+        "notice_ids": [],
+        "validation_report": null,
+        "validation_summary": null,
+        "proto_id_type": "<class 'bson.objectid.ObjectId'>",
+        "injected_snapshot_id": "proto_doc"
+      }
+    },
+    {
+      "collection_name": "notice_kpi",
+      "proto_document": {
+        "_id": "003558-2021",
+        "exec_time": null,
+        "form_number": null,
+        "eforms_subtype": null,
+        "status": null,
+        "proto_id_type": "<class 'str'>",
+        "injected_snapshot_id": "proto_doc"
+      }
+    },
+    {
+      "collection_name": "notice_collection",
+      "proto_document": {
+        "_id": "003567-2021",
+        "created_at": null,
+        "created_at_str_y": null,
+        "created_at_str_ym": null,
+        "created_at_str_ymd": null,
+        "status": null,
+        "ted_id": null,
+        "validation_summary": {
+          "object_data": null,
+          "created": null,
+          "notice_ids": [],
+          "xml_manifestation": {
+            "xpath_coverage_summary": {
+              "mapping_suite_identifier": null,
+              "validation_result": {
+                "xpath_covered": null,
+                "xpath_not_covered": null
+              }
+            }
+          },
+          "rdf_manifestation": {
+            "sparql_summary": {
+              "validation_results": [],
+              "aggregate": {
+                "valid": null,
+                "unverifiable": null,
+                "warning": null,
+                "invalid": null,
+                "error": null
+              }
+            },
+            "shacl_summary": {
+              "validation_results": [],
+              "result_severity": {
+                "aggregate": {
+                  "info": null,
+                  "warning": null,
+                  "violation": null
+                }
+              }
+            }
+          },
+          "distilled_rdf_manifestation": {
+            "sparql_summary": {
+              "validation_results": [],
+              "aggregate": {
+                "valid": null,
+                "unverifiable": null,
+                "warning": null,
+                "invalid": null,
+                "error": null
+              }
+            },
+            "shacl_summary": {
+              "validation_results": [],
+              "result_severity": {
+                "aggregate": {
+                  "info": null,
+                  "warning": null,
+                  "violation": null
+                }
+              }
+            }
+          }
+        },
+        "normalised_metadata": {
+          "title": null,
+          "long_title": null,
+          "notice_publication_number": null,
+          "publication_date": null,
+          "ojs_issue_number": null,
+          "ojs_type": null,
+          "city_of_buyer": null,
+          "name_of_buyer": null,
+          "original_language": null,
+          "country_of_buyer": null,
+          "eu_institution": null,
+          "document_sent_date": null,
+          "deadline_for_submission": null,
+          "notice_type": null,
+          "form_type": null,
+          "place_of_performance": [],
+          "extracted_legal_basis_directive": null,
+          "legal_basis_directive": null,
+          "form_number": null,
+          "eforms_subtype": null,
+          "xsd_version": null,
+          "publication_date_str_y": null,
+          "publication_date_str_ym": null,
+          "publication_date_str_ymd": null,
+          "document_sent_date_str_y": null,
+          "document_sent_date_str_ym": null,
+          "document_sent_date_str_ymd": null
+        },
+        "proto_id_type": "<class 'str'>",
+        "injected_snapshot_id": "proto_doc"
+      }
+    }
+  ]
+}
