@@ -1,4 +1,7 @@
+import os
+
 import click
+import dotenv
 from pymongo import MongoClient
 
 from metabase.core.adapters.cmd_runner import CmdRunner as BaseCmdRunner
@@ -8,7 +11,10 @@ from metabase.migration.services.database_management import remove_mongodb_snaps
 from metabase.migration.services.import_metabase import import_metabase_data_from_file
 import time
 from loadbar import LoadBar
+dotenv.load_dotenv(verbose=True, override=True)
 
+METABASE_HOST = os.environ.get('METABASE_HOST', default=None)
+METABASE_USER = os.environ.get('METABASE_USER', default=None)
 
 def wait_n_seconds(message: str, number_of_seconds: int):
     print(message)
