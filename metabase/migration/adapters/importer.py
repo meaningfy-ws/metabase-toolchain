@@ -18,6 +18,7 @@ dotenv.load_dotenv(verbose=True, override=True)
 MONGO_DB_USER = os.environ.get('MONGO_DB_USER', default=None)
 MONGO_DB_PASS = os.environ.get('MONGO_DB_PASS', default=None)
 MONGO_DB_HOST = os.environ.get('MONGO_DB_HOST', default=None)
+METABASE_DB_NAME = os.environ.get('METABASE_DB_NAME', default="TEDSWS MongoDB")
 ENV_MONGO_DB_PORT = os.environ.get('MONGO_DB_PORT', default=None)
 MONGO_DB_PORT = int(ENV_MONGO_DB_PORT) if ENV_MONGO_DB_PORT else None
 DATA_KEY = "data"
@@ -38,7 +39,7 @@ class Importer:
 
         self.logger = logger
 
-    def _get_database_id_by_name(self, database_name: str) -> Optional[int]:
+    def _get_database_id_by_name(self, metabase_database_name: str) -> Optional[int]:
         """
 
         """
@@ -46,7 +47,7 @@ class Importer:
         if DATA_KEY in result_dict.keys():
             for database_metadata in result_dict[DATA_KEY]:
                 if NAME_KEY in database_metadata.keys():
-                    if database_name == database_metadata[NAME_KEY]:
+                    if metabase_database_name == database_metadata[NAME_KEY]:
                         return database_metadata[ID_KEY]
         return None
 
@@ -57,7 +58,6 @@ class Importer:
         sync_db_endpoint = f"{API.DATABASE_ENDPOINT}/{database_id}/sync_schema"
         self.api.post(sync_db_endpoint)
 
-
     def _sync_database_values_by_id(self, database_id: int):
         """
 
@@ -65,12 +65,11 @@ class Importer:
         sync_db_endpoint = f"{API.DATABASE_ENDPOINT}/{database_id}/rescan_values"
         self.api.post(sync_db_endpoint)
 
-
     def sync_database_by_name(self, database_name: str):
         """
 
         """
-        database_id  = self._get_database_id_by_name(database_name=database_name)
+        database_id = self._get_database_id_by_name(metabase_database_name=METABASE_DB_NAME)
         if database_id is not None:
             self.logger.info(f"Found database_id={database_id} for database with name {database_name}")
             self._sync_database_schema_by_id(database_id=database_id)
@@ -79,7 +78,6 @@ class Importer:
             self.logger.info("Sync database values ... ok")
         else:
             self.logger.error(f"Sync database with name {database_name} ... error")
-
 
     @classmethod
     def _import_resources(cls, items, api_call):
