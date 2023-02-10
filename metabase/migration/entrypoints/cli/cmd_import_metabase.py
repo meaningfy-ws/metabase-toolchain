@@ -1,10 +1,35 @@
+import os
+
 import click
+import dotenv
 from pymongo import MongoClient
 
 from metabase.core.adapters.cmd_runner import CmdRunner as BaseCmdRunner
 from metabase.migration.resources import DB_SNAPSHOT_FILE_PATH
-from metabase.migration.services.database_management import create_mongodb_snapshot, remove_mongodb_snapshot
+from metabase.migration.services.database_management import remove_mongodb_snapshot, \
+    inject_mongodb_snapshot
 from metabase.migration.services.import_metabase import import_metabase_data_from_file
+import time
+from loadbar import LoadBar
+
+dotenv.load_dotenv(verbose=True, override=True)
+
+METABASE_HOST = os.environ.get('METABASE_HOST', default=None)
+METABASE_USER = os.environ.get('METABASE_USER', default=None)
+METABASE_PASSWORD = os.environ.get('METABASE_PASSWORD', default=None)
+DB_AUTH_URL = os.environ.get('DB_AUTH_URL', default=None)
+DB_NAME = os.environ.get('DB_NAME', default=None)
+
+
+def wait_n_seconds(message: str, number_of_seconds: int):
+    print(message)
+    bar = LoadBar(max=number_of_seconds)
+    bar.start()
+    for i in range(number_of_seconds):
+        time.sleep(1)
+        bar.update(step=i)
+    bar.end()
+
 
 CMD_NAME = "IMPORT_METABASE"
 
@@ -32,11 +57,17 @@ class CmdRunner(BaseCmdRunner):
         error = None
         try:
             mongodb_client = MongoClient(self.db_auth_url)
-            create_mongodb_snapshot(database_name=self.db_name,
-                                    result_snapshot_path=DB_SNAPSHOT_FILE_PATH,
+            inject_mongodb_snapshot(database_name=self.db_name,
+                                    database_snapshot_path=DB_SNAPSHOT_FILE_PATH,
                                     mongodb_client=mongodb_client)
-            import_metabase_data_from_file(self.host, self.user, self.password, self.file, self.get_logger())
+            wait_n_seconds(message="Prepare environment:", number_of_seconds=1)
+            import_metabase_data_from_file(host=self.host, user=self.user, password=self.password,
+                                           database_name=self.db_name,
+                                           file=self.file,
+                                           logger=self.get_logger())
+            wait_n_seconds(message="Import metabase data from file:", number_of_seconds=2)
             remove_mongodb_snapshot(database_name=self.db_name, mongodb_client=mongodb_client)
+            wait_n_seconds(message="Clean environment:", number_of_seconds=1)
         except Exception as e:
             error = e
 
@@ -60,13 +91,14 @@ def run(host, user, password, file, db_auth_url, db_name):
 
 
 @click.command()
-@click.argument('host', required=True)
-@click.argument('user', required=True)
-@click.argument('password', required=True)
-@click.argument('file', required=False)
-@click.argument('db_auth_url', required=True)
-@click.argument('db_name', required=True)
-def main(host, user, password, file, db_auth_url, db_name):
+@click.argument('file', required=True)
+# @click.argument('host', required=True)
+# @click.argument('user', required=True)
+# @click.argument('password', required=True)
+# @click.argument('db_auth_url', required=True)
+# @click.argument('db_name', required=True)
+def main(file, host=METABASE_HOST, user=METABASE_USER, password=METABASE_PASSWORD,
+         db_auth_url=DB_AUTH_URL, db_name=DB_NAME):
     run(host, user, password, file, db_auth_url, db_name)
 
 

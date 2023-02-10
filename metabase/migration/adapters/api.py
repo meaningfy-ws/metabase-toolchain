@@ -92,7 +92,7 @@ class API:
         api_settings = self.get(self.SETTING_ENDPOINT)
         return api_settings
 
-    def post(self, endpoint: str, data: dict):
+    def post(self, endpoint: str, data: dict = None):
         response = self.metabase.post(self.api_url(endpoint), json=data)
         return response.json()
 
