@@ -10,14 +10,14 @@ import time
 from loadbar import LoadBar
 
 
-def wait_n_seconds(number_of_seconds: int):
+def wait_n_seconds(message: str, number_of_seconds: int):
+    print(message)
     bar = LoadBar(max=number_of_seconds)
     bar.start()
     for i in range(number_of_seconds):
         time.sleep(1)
         bar.update(step=i)
     bar.end()
-
 
 
 CMD_NAME = "IMPORT_METABASE"
@@ -49,15 +49,14 @@ class CmdRunner(BaseCmdRunner):
             inject_mongodb_snapshot(database_name=self.db_name,
                                     database_snapshot_path=DB_SNAPSHOT_FILE_PATH,
                                     mongodb_client=mongodb_client)
-            sync_metabase = True
-            while sync_metabase:
-                answer = input("You sync MetaBase already?[y/n]")
-                if answer == "y":
-                    sync_metabase = False
-                else:
-                    print(f"Go to in MetaBase and sync {self.db_name}!")
-            import_metabase_data_from_file(self.host, self.user, self.password, self.file, self.get_logger())
+            wait_n_seconds(message="Prepare environment:", number_of_seconds=1)
+            import_metabase_data_from_file(host=self.host, user=self.user, password=self.password,
+                                           database_name=self.db_name,
+                                           file=self.file,
+                                           logger=self.get_logger())
+            wait_n_seconds(message="Import metabase data from file:",number_of_seconds=2)
             remove_mongodb_snapshot(database_name=self.db_name, mongodb_client=mongodb_client)
+            wait_n_seconds(message="Clean environment:", number_of_seconds=1)
         except Exception as e:
             error = e
 
@@ -81,12 +80,12 @@ def run(host, user, password, file, db_auth_url, db_name):
 
 
 @click.command()
-@click.argument('host', required=True)
-@click.argument('user', required=True)
-@click.argument('password', required=True)
-@click.argument('file', required=False)
-@click.argument('db_auth_url', required=True)
-@click.argument('db_name', required=True)
+# @click.argument('host', required=True)
+# @click.argument('user', required=True)
+# @click.argument('password', required=True)
+@click.argument('file', required=True)
+# @click.argument('db_auth_url', required=True)
+# @click.argument('db_name', required=True)
 def main(host, user, password, file, db_auth_url, db_name):
     run(host, user, password, file, db_auth_url, db_name)
 
