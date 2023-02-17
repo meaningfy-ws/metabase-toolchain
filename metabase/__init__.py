@@ -1,14 +1,9 @@
 __version__ = "0.0.1"
 
 import os
-import pathlib
 import dotenv
 
-PROJECT_PATH = pathlib.Path(__file__).parent.parent.resolve()
-DOT_ENV_PATH = PROJECT_PATH / ".env"
-dotenv.load_dotenv(verbose=True, override=True, dotenv_path=DOT_ENV_PATH)
-
-
+dotenv.load_dotenv(verbose=True, override=True, dotenv_path="./.env")
 
 METABASE_HOST = os.environ.get('METABASE_HOST', default=None)
 METABASE_USER = os.environ.get('METABASE_USER', default=None)
