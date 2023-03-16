@@ -1,9 +1,9 @@
-install: install-dev
+install:
 	@ pip install --upgrade pip
 	@ pip install -r requirements.txt
 	@ pip install .
 
-install-dev:
+install-dev: install
 	@ pip install --upgrade pip
 	@ pip install -r requirements.dev.txt
 
