@@ -53,6 +53,8 @@ def create_mongodb_snapshot(database_name: str, result_snapshot_path: pathlib.Pa
             proto_document = {}
             for document in itertools.islice(db_collection.find(), 200):
                 proto_document = merge_dicts(document, proto_document)
+            if not proto_document:
+                continue
             proto_document[MONGODB_ID_TYPE_KEY] = str(type(proto_document[MONGODB_ID_KEY]))
             proto_document[MONGODB_ID_KEY] = str(proto_document[MONGODB_ID_KEY])
             proto_document[SNAPSHOT_ID_KEY] = SNAPSHOT_ID_VALUE
