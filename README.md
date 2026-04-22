@@ -140,6 +140,24 @@ Consumed by `infra/docker-compose.yml` for `${VAR:-default}` substitution.
 | `MONGO_VERSION` | `6` | `6` | MongoDB Docker image tag. Used as the schema-stub target for `import_metabase`. |
 | `MONGO_HOST_PORT` | `27017` | `27018` | Host-side port for the MongoDB container (bound to 127.0.0.1). |
 
+## Security
+
+Automated scanning runs on every push and pull request via GitHub Actions:
+
+- **CodeQL** (`.github/workflows/codeql.yml`) — semantic SAST for Python source. Findings appear under the repo's **Security → Code scanning** tab and as inline PR annotations.
+- **Snyk** (`.github/workflows/snyk-security.yml`) — dependency and container-image vulnerability scanning.
+- **Dependabot** (GitHub-native, no workflow file needed) — opens PRs for vulnerable dependencies when enabled under **Settings → Code security**.
+
+For quick local checks before opening a PR:
+
+```bash
+pip install pip-audit bandit
+pip-audit                                         # Python dependency CVEs
+bandit -r metabase/                               # Python source SAST
+docker run --rm aquasec/trivy:latest image \
+    metabase/metabase:v0.44.6                     # base image CVEs
+```
+
 ## License
 
 Apache 2.0 — see [LICENSE](./LICENSE).
