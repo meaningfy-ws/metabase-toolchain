@@ -1,0 +1,77 @@
+[project]
+name = "metabase-toolchain"
+version = "0.0.1"
+description = "A set of useful tools for Metabase: import/export of dashboards, database and security configuration, snapshot management."
+authors = [
+    { name = "Meaningfy", email = "hi@meaningfy.ws" }
+]
+maintainers = [
+    { name = "Meaningfy Team", email = "hi@meaningfy.ws" }
+]
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.9,<3.15"
+classifiers = [
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Natural Language :: English",
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: System Administrators",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+    "pydantic (>=2.6,<3.0.0)",
+    "urllib3 (>=2.0,<3.0.0)",
+    "python-dotenv (>=1.0,<2.0.0)",
+    "click (>=8.1,<9.0.0)",
+    "pymongo (>=4.6,<5.0.0)",
+    "requests (>=2.31,<3.0.0)",
+    "load-bar (>=0.0.7,<1.0.0)",
+]
+
+[project.urls]
+Homepage = "https://github.com/meaningfy-ws/metabase-toolchain"
+Repository = "https://github.com/meaningfy-ws/metabase-toolchain"
+
+[project.scripts]
+export_metabase = "metabase.migration.entrypoints.cli.cmd_export_metabase:main"
+import_metabase = "metabase.migration.entrypoints.cli.cmd_import_metabase:main"
+manage_snapshot_db = "metabase.migration.entrypoints.cli.cmd_manage_db_snapshot:main"
+
+[tool.poetry]
+packages = [
+    { include = "metabase" }
+]
+include = [
+    { path = "metabase/migration/resources/*.json", format = ["sdist", "wheel"] }
+]
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[project.optional-dependencies]
+test = [
+    "pytest>=8.0,<10.0.0",
+    "pytest-cov>=5.0,<8.0.0",
+    "coverage>=7.4,<8.0.0",
+]
+lint = [
+    "ruff>=0.6.0,<1.0.0",
+    "mypy>=1.11.0,<2.0.0",
+]
+dev = [
+    "pytest>=8.0,<10.0.0",
+    "pytest-cov>=5.0,<8.0.0",
+    "coverage>=7.4,<8.0.0",
+    "ruff>=0.6.0,<1.0.0",
+    "mypy>=1.11.0,<2.0.0",
+]
