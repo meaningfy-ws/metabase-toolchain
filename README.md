@@ -79,7 +79,7 @@ On success, the Metabase UI shows the imported users, collections, dashboards, a
 
 ### Useful targets
 
-- `make test` — run the test suite (from `src/`). Needs `mongo` running; no pre-population required.
+- `make test` — run the test suite. Needs `mongo` running; no pre-population required.
 - `make init-mongo` — **optional.** Drops and re-creates the local Mongo database named by `DB_NAME` with a placeholder document. Useful for regenerating the bundled snapshot (`manage_snapshot_db -u`) from a known state, or for giving the e2e tests non-empty collections to exercise.
 - `make down` — stop containers (preserves volumes).
 - `make rebuild` — wipe volumes, pull fresh images, and start.
@@ -89,8 +89,8 @@ On success, the Metabase UI shows the imported users, collections, dashboards, a
 | Command | Purpose |
 |---|---|
 | `import_metabase <export.json>` | Import an exported Metabase configuration into a running Metabase instance. |
-| `export_metabase` | Export the current Metabase configuration to an `export.json`. See `--help`. |
-| `manage_snapshot_db` | Manage the bundled MongoDB schema-stub snapshot used during import (create, inject, remove). See `--help`. |
+| `export_metabase <host> <user> <password> [file]` | Export the current Metabase configuration to a JSON file. Defaults to `./data/export.json`. |
+| `manage_snapshot_db` | Manage the bundled MongoDB schema-stub snapshot (create, inject, remove). See `--help`. |
 
 ## Environment variables
 
@@ -145,8 +145,6 @@ Consumed by `src/infra/docker-compose.yml` for `${VAR:-default}` substitution.
 Automated scanning runs on every push and pull request via GitHub Actions:
 
 - **CodeQL** (`.github/workflows/codeql.yml`) — semantic SAST for Python source. Findings appear under the repo's **Security → Code scanning** tab and as inline PR annotations.
-- **Snyk** (`.github/workflows/snyk-security.yml`) — dependency and container-image vulnerability scanning.
-- **Dependabot** (GitHub-native, no workflow file needed) — opens PRs for vulnerable dependencies when enabled under **Settings → Code security**.
 
 For quick local checks before opening a PR:
 
@@ -160,4 +158,4 @@ docker run --rm aquasec/trivy:latest image \
 
 ## License
 
-Apache 2.0 — see [LICENSE](./LICENSE).
+Apache 2.0 — see [LICENSE](LICENSE).
