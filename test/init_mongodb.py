@@ -1,18 +1,19 @@
-"""Create a fresh MongoDB database named by DB_NAME in ./.env.
+"""Create a fresh MongoDB database named by DB_NAME in src/.env.
 
 Drops the database if it already exists, then creates it with a single
 `_init_marker` collection so the database is visible to MongoDB clients
 (MongoDB creates databases lazily, so a first write is needed).
 
-Usage (from repo root):
-    python tests/init_mongodb.py
+Usage (from src/):
+    python ../test/init_mongodb.py
 """
+
 import os
 
 import dotenv
 from pymongo import MongoClient
 
-dotenv.load_dotenv(dotenv_path="./.env")
+dotenv.load_dotenv(dotenv_path=dotenv.find_dotenv(usecwd=True))
 
 DB_AUTH_URL = os.environ["DB_AUTH_URL"]
 DB_NAME = os.environ["DB_NAME"]
