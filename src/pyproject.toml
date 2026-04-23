@@ -8,8 +8,8 @@ authors = [
 maintainers = [
     { name = "Meaningfy Team", email = "hi@meaningfy.ws" }
 ]
-readme = "README.md"
-license = { file = "LICENSE" }
+readme = "../docs/README.md"
+license = { file = "../LICENSE" }
 requires-python = ">=3.9,<3.15"
 classifiers = [
     "Programming Language :: Python",

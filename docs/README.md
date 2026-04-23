@@ -15,14 +15,14 @@ The main CLI is `import_metabase`, which loads a previously exported `export.jso
 
 ## Local development setup
 
-The steps below reproduce the full import flow using a local Metabase + MongoDB stack from `infra/docker-compose.yml`, with `tests/test_data/export.json` as the sample input.
+The steps below reproduce the full import flow using a local Metabase + MongoDB stack from `src/infra/docker-compose.yml`, with `test/test_data/export.json` as the sample input.
 
 > For **cloud / production** deployments, follow the separate TED-SWS installation manual. This section covers local development only.
 
-### 1. Create `./.env`
+### 1. Create `src/.env`
 
 ```bash
-cp .env.example .env
+cp src/.env.example src/.env
 ```
 
 The committed template has local-dev defaults (Metabase on `3001`, Mongo on `27018`, admin `a@a.com` / `okokok123`, data source name `TEDSWS MongoDB`, database `aggregates_db`). Edit any value you want to change.
@@ -36,12 +36,12 @@ make up
 Starts `metabase`, `metabase-postgres`, and `mongo` on a shared `metabase-net` bridge network. Verify they are healthy:
 
 ```bash
-docker compose -f infra/docker-compose.yml -p metabase-toolchain ps
+docker compose -f src/infra/docker-compose.yml -p metabase-toolchain ps
 ```
 
 ### 3. Complete Metabase's first-run wizard
 
-Open `http://localhost:3001` and step through setup. Set the admin email and password to match `METABASE_USER` / `METABASE_PASSWORD` in `.env` (defaults: `a@a.com` / `okokok123`). If Metabase's password policy rejects the default, pick a stronger one and update `.env` to match.
+Open `http://localhost:3001` and step through setup. Set the admin email and password to match `METABASE_USER` / `METABASE_PASSWORD` in `src/.env` (defaults: `a@a.com` / `okokok123`). If Metabase's password policy rejects the default, pick a stronger one and update `src/.env` to match.
 
 Skip the "Add your data" step — the data source is registered manually in the next step.
 
@@ -72,14 +72,14 @@ make install-cli
 ### 6. Run the import
 
 ```bash
-import_metabase tests/test_data/export.json
+import_metabase test/test_data/export.json
 ```
 
 On success, the Metabase UI shows the imported users, collections, dashboards, and cards. Re-running is safe — existing resources are updated rather than duplicated.
 
 ### Useful targets
 
-- `make test` — run the test suite. Needs `mongo` running; no pre-population required.
+- `make test` — run the test suite (from `src/`). Needs `mongo` running; no pre-population required.
 - `make init-mongo` — **optional.** Drops and re-creates the local Mongo database named by `DB_NAME` with a placeholder document. Useful for regenerating the bundled snapshot (`manage_snapshot_db -u`) from a known state, or for giving the e2e tests non-empty collections to exercise.
 - `make down` — stop containers (preserves volumes).
 - `make rebuild` — wipe volumes, pull fresh images, and start.
@@ -94,7 +94,7 @@ On success, the Metabase UI shows the imported users, collections, dashboards, a
 
 ## Environment variables
 
-All variables live in a **single `./.env` file** at the repo root. It is consumed by:
+All variables live in a **single `src/.env` file**. It is consumed by:
 
 - The Python CLIs via `dotenv`.
 - `docker-compose` (`make up`, `make rebuild`) via `--env-file .env` passed from the Makefile.
@@ -102,7 +102,7 @@ All variables live in a **single `./.env` file** at the repo root. It is consume
 Start from the committed template:
 
 ```bash
-cp .env.example .env
+cp src/.env.example src/.env
 ```
 
 ### Application variables
@@ -125,7 +125,7 @@ Read by the Python CLIs.
 
 ### Infra variables
 
-Consumed by `infra/docker-compose.yml` for `${VAR:-default}` substitution.
+Consumed by `src/infra/docker-compose.yml` for `${VAR:-default}` substitution.
 
 | Variable | Compose default | Example | Purpose |
 |---|---|---|---|
@@ -153,7 +153,7 @@ For quick local checks before opening a PR:
 ```bash
 pip install pip-audit bandit
 pip-audit                                         # Python dependency CVEs
-bandit -r metabase/                               # Python source SAST
+bandit -r src/metabase/                           # Python source SAST
 docker run --rm aquasec/trivy:latest image \
     metabase/metabase:v0.44.6                     # base image CVEs
 ```
