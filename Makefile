@@ -1,19 +1,19 @@
 install:
 	@ pip install --upgrade pip
-	@ pip install .
+	@ pip install src/.
 
 install-dev:
 	@ pip install --upgrade pip
-	@ pip install -e ".[dev]"
+	@ pip install -e "src/.[dev]"
 
 reinstall:
 	@ pip uninstall -y metabase-toolchain || true
-	@ pip install --upgrade --force-reinstall --no-cache-dir .
+	@ pip install --upgrade --force-reinstall --no-cache-dir src/.
 
 install-cli:
 	@ pip install --upgrade pip
 	@ pip uninstall -y metabase-toolchain || true
-	@ pip install --force-reinstall --no-deps -e .
+	@ pip install --force-reinstall --no-deps -e src/.
 	@ echo ""
 	@ echo "CLI entry points installed into $$(python -c 'import sys; print(sys.prefix)'):"
 	@ for cmd in import_metabase export_metabase manage_snapshot_db; do \
@@ -22,16 +22,16 @@ install-cli:
 	done
 
 test:
-	@ pytest tests
+	@ pytest test
 
 # =============================================================================
 # Metabase local stack (docker compose)
 # =============================================================================
 
-COMPOSE = docker compose --env-file .env -f infra/docker-compose.yml -p metabase-toolchain
+COMPOSE = docker compose --env-file src/.env -f src/infra/docker-compose.yml -p metabase-toolchain
 
 up:
-	@ test -f .env || (echo "Error: ./.env not found at repo root. Copy .env.example to .env first." && exit 1)
+	@ test -f src/.env || (echo "Error: src/.env not found. Copy src/.env.example to src/.env first." && exit 1)
 	@ $(COMPOSE) up -d
 
 down:
@@ -44,7 +44,7 @@ rebuild:
 	@ $(COMPOSE) up -d
 
 init-mongo:
-	@ test -f .env || (echo "Error: ./.env not found at repo root. Create it first (see README)." && exit 1)
-	@ python tests/init_mongodb.py
+	@ test -f src/.env || (echo "Error: src/.env not found. Create it first (see docs/README.md)." && exit 1)
+	@ python test/init_mongodb.py
 
 .PHONY: install install-dev reinstall install-cli test up down rebuild init-mongo

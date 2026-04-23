@@ -1,8 +1,8 @@
 # =============================================================================
 # Metabase Stack - Local Development
 # Usage:
-#   from repo root:  docker compose -f infra/docker-compose.yml up -d
-#   or via Make:     make metabase-up
+#   from src/:       docker compose -f infra/docker-compose.yml up -d
+#   or via Make:     make up
 # =============================================================================
 
 networks:
